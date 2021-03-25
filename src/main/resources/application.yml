@@ -8,7 +8,7 @@ spring:
     url: jdbc:mysql://127.0.0.1/cache_demo?characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&useSSL=false&autoReconnect=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: abcd4321
+    password:
     type: com.alibaba.druid.pool.DruidDataSource
 
 
