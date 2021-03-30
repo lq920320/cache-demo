@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cache.dao.mappers.EmployeeMapper">
+    <insert id="insertEmp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO employee(`emp_no`, `name`, `email`, `phone`, `create_at`, `update_at`)
+        VALUES (#{empNo}, #{name}, #{email}, #{phone}, #{createAt}, #{updateAt})
+    </insert>
+
+    <update id="updateEmp">
+        UPDATE employee
+        SET `name`      = #{emp.name},
+            `email`     = #{emp.email},
+            `phone`     = #{emp.phone},
+            `update_at` = #{emp.updateAt}
+        WHERE `id` = #{id};
+    </update>
+
+    <select id="getById" resultType="com.cache.dao.entities.Employee">
+        SELECT *
+        FROM employee
+        WHERE id = #{id};
+    </select>
+
+    <select id="getList" resultType="com.cache.dao.entities.Employee">
+        SELECT *
+        FROM employee;
+    </select>
+
+    <select id="getByEmpNo" resultType="com.cache.dao.entities.Employee">
+        SELECT *
+        FROM employee
+        WHERE emp_no = #{empNo};
+    </select>
+</mapper>

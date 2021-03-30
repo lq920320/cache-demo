@@ -25,6 +25,8 @@
         <guava.version>27.1-jre</guava.version>
         <hutool.version>5.5.9</hutool.version>
         <persistence.version>1.0.2</persistence.version>
+        <swagger.version>2.7.0</swagger.version>
+        <swagger-bootstrap-ui.version>1.9.0</swagger-bootstrap-ui.version>
     </properties>
 
     <dependencies>
@@ -125,6 +127,23 @@
         <!--            <groupId>com.github.ben-manes.caffeine</groupId>-->
         <!--            <artifactId>jcache</artifactId>-->
         <!--        </dependency>-->
+
+        <!-- swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>${swagger-bootstrap-ui.version}</version>
+        </dependency>
 
     </dependencies>
 

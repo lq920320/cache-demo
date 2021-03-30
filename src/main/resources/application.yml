@@ -10,5 +10,10 @@ spring:
     username: root
     password:
     type: com.alibaba.druid.pool.DruidDataSource
-
-
+# mybatis 配置
+mybatis:
+  configuration:
+    # 下划线转驼峰
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.cache.dao.entities
