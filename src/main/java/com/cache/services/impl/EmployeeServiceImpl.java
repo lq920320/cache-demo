@@ -69,4 +69,15 @@ public class EmployeeServiceImpl implements EmployeeService {
             return vo;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public EmployeeVO getByEmpNo(String empNo) {
+        Employee employee = empMapper.getByEmpNo(empNo);
+        if (Objects.isNull(employee)) {
+            return null;
+        }
+        EmployeeVO vo = new EmployeeVO();
+        BeanUtils.copyProperties(employee, vo);
+        return vo;
+    }
 }

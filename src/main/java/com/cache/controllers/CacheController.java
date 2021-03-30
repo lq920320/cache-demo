@@ -34,7 +34,7 @@ public class CacheController {
     @Resource
     private CaffeineService caffeineService;
 
-    @ApiOperation("获取Cacheable缓存数据")
+    @ApiOperation("获取 Cacheable 缓存数据")
     @GetMapping("cacheable")
     public ResultWrapper<CacheResultVO> getCacheableResult(@ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo) {
         return null;
@@ -48,8 +48,19 @@ public class CacheController {
 
     @GetMapping("hutool")
     @ApiOperation("获取 hutool 缓存")
-    public ResultWrapper<CacheResultVO> getHutoolCacheResult(@ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo) {
-        return null;
+    public ResultWrapper<CacheResultVO> getHutoolCacheResult(
+            @ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo,
+            @ApiParam(name = "timeout", value = "是否有过期时间（默认60s）") @RequestParam(value = "timeout", required = false) Boolean timeout
+    ) {
+        CacheResultVO result;
+        if (BooleanUtils.toBoolean(timeout)) {
+            // 有过期时间的 map
+            result = hutoolCacheService.getEmpByNoWithExpireMap(empNo);
+        } else {
+            // 常规 map
+            result = hutoolCacheService.getEmpByNo(empNo);
+        }
+        return ResultWrapper.of(result);
     }
 
     @GetMapping("map")

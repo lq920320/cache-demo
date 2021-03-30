@@ -2,18 +2,15 @@ package com.cache.services.impl;
 
 import com.cache.common.enums.DataTypeEnum;
 import com.cache.common.exceptions.BusinessException;
-import com.cache.dao.entities.Employee;
-import com.cache.dao.mappers.EmployeeMapper;
 import com.cache.model.CacheResultVO;
 import com.cache.model.EmployeeVO;
+import com.cache.services.EmployeeService;
 import com.cache.services.MapCacheService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author zetu
@@ -23,7 +20,7 @@ import java.util.Objects;
 public class MapCacheServiceImpl implements MapCacheService {
 
     @Resource
-    private EmployeeMapper employeeMapper;
+    private EmployeeService employeeService;
 
     /**
      * key 为员工编号，value 为员工数据，可以为空，避免击穿
@@ -49,7 +46,8 @@ public class MapCacheServiceImpl implements MapCacheService {
             result.setEmployee(CACHE_MAP.get(empNo));
             return result;
         }
-        EmployeeVO empVo = getByEmpNo(empNo);
+        // 从数据库获取数据
+        EmployeeVO empVo = employeeService.getByEmpNo(empNo);
         // 放入缓存的 map
         CACHE_MAP.put(empNo, empVo);
 
@@ -61,7 +59,7 @@ public class MapCacheServiceImpl implements MapCacheService {
     @Override
     public CacheResultVO getEmpByNoWithExpireMap(String empNo) {
         CacheResultVO result = new CacheResultVO();
-
+        // 检查缓存数据是否过期
         checkExpireMap(empNo);
 
         if (EXPIRE_CACHE_MAP.containsKey(empNo)) {
@@ -70,7 +68,8 @@ public class MapCacheServiceImpl implements MapCacheService {
                     EXPIRE_CACHE_MAP.get(empNo).get(DataTypeEnum.DATA.name()));
             return result;
         }
-        EmployeeVO empVo = getByEmpNo(empNo);
+        // 从数据库获取数据
+        EmployeeVO empVo = employeeService.getByEmpNo(empNo);
         // 放入缓存的 map
         this.put(empNo, empVo);
 
@@ -116,19 +115,4 @@ public class MapCacheServiceImpl implements MapCacheService {
         EXPIRE_CACHE_MAP.put(empNo, dataMap);
     }
 
-    /**
-     * 从数据库获取数据
-     *
-     * @param empNo
-     * @return
-     */
-    private EmployeeVO getByEmpNo(String empNo) {
-        Employee employee = employeeMapper.getByEmpNo(empNo);
-        if (Objects.isNull(employee)) {
-            return null;
-        }
-        EmployeeVO vo = new EmployeeVO();
-        BeanUtils.copyProperties(employee, vo);
-        return vo;
-    }
 }

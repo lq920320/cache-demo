@@ -40,4 +40,12 @@ public interface EmployeeService {
      * @return
      */
     List<EmployeeVO> getList();
+
+    /**
+     * 根据员工编号获取员工信息
+     *
+     * @param empNo
+     * @return
+     */
+    EmployeeVO getByEmpNo(String empNo);
 }
