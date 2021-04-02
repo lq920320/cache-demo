@@ -7,6 +7,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -33,6 +34,8 @@ public class SwaggerConfig {
                 .description("本地缓存的几种实现方式，仅供学习参考。")
                 // 服务条款
                 .termsOfServiceUrl("")
+                // 联系人
+                .contact(new Contact("lq920320", "http://github.com/lq920320", ""))
                 // 版本
                 .version("1.0").build();
     }

@@ -1,5 +1,6 @@
 package com.cache.services.impl;
 
+import com.cache.model.CacheResultVO;
 import com.cache.services.GuavaCacheService;
 import org.springframework.stereotype.Service;
 
@@ -9,4 +10,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class GuavaCacheServiceImpl implements GuavaCacheService {
+
+
+
+    @Override
+    public CacheResultVO getEmpByNo(String empNo, Boolean timeout) {
+        return null;
+    }
 }
