@@ -2,6 +2,8 @@ package com.cache.services;
 
 import com.cache.model.CacheResultVO;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * 使用 guava 创建本地缓存
  *
@@ -16,5 +18,5 @@ public interface GuavaCacheService {
      * @param timeout 是否有期限
      * @return 员工数据
      */
-    CacheResultVO getEmpByNo(String empNo, Boolean timeout);
+    CacheResultVO getEmpByNo(String empNo, Boolean timeout) throws ExecutionException;
 }

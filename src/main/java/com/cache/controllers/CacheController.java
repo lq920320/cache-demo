@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author zetu
@@ -73,7 +74,7 @@ public class CacheController {
     public ResultWrapper<CacheResultVO> getGuavaCacheResult(
             @ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo,
             @ApiParam(name = "timeout", value = "是否有过期时间（默认60s）") @RequestParam(value = "timeout", required = false) Boolean timeout
-    ) {
+    ) throws ExecutionException {
         CacheResultVO result = guavaCacheService.getEmpByNo(empNo, timeout);
         return ResultWrapper.of(result);
     }

@@ -24,12 +24,27 @@ public class GuavaCacheTest {
 
     private LoadingCache<Integer, AtomicLong> loadingCache;
 
+    private LoadingCache<Integer, AtomicLong> fixedLoadingCache;
+
     private Cache<String, String> cacheFormCallable;
 
     @Before
     public void init() {
         loadingCache = CacheBuilder.newBuilder()
                 .expireAfterWrite(3, TimeUnit.SECONDS)
+                // 这里可以监听移除动作
+                .removalListener(notification -> log.info("删除原因={}，删除 key={},删除 value={}",
+                        notification.getCause(), notification.getKey(), notification.getValue()))
+                .build(new CacheLoader<Integer, AtomicLong>() {
+                    @Override
+                    public AtomicLong load(Integer key) throws Exception {
+                        // 当 key 值对应当 value 不存在时，返回当默认值
+                        return new AtomicLong(0);
+                    }
+                });
+
+        fixedLoadingCache = CacheBuilder.newBuilder()
+                .maximumSize(3)
                 // 这里可以监听移除动作
                 .removalListener(notification -> log.info("删除原因={}，删除 key={},删除 value={}",
                         notification.getCause(), notification.getKey(), notification.getValue()))
@@ -55,6 +70,25 @@ public class GuavaCacheTest {
         ThreadUtil.sleep(4000);
         // 过期，返回 默认值 0
         System.out.println(loadingCache.get(1));
+    }
+
+    @Test
+    public void fixedLoadingCacheTest() throws ExecutionException {
+        fixedLoadingCache.put(1, new AtomicLong(100));
+        fixedLoadingCache.put(2, new AtomicLong(200));
+        // 获取一下 key = 1 的数据
+        System.out.println(fixedLoadingCache.get(1));
+
+        fixedLoadingCache.put(3, new AtomicLong(300));
+        // 超出范围，guava 是基于 LRU 进行删除数据的
+        fixedLoadingCache.put(4, new AtomicLong(400));
+
+        // 获取 key = 1 还是可以的
+        System.out.println(fixedLoadingCache.get(1));
+        // 获取 key = 2 便是为默认值，此时还会把 (2,0) 放入 cache 中，key = 3 未被访问过会被删除
+        System.out.println(fixedLoadingCache.get(2));
+        System.out.println(fixedLoadingCache.size());
+
     }
 
     @Test

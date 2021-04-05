@@ -2,16 +2,12 @@ package com.cache.services.impl;
 
 import cn.hutool.cache.Cache;
 import cn.hutool.cache.CacheUtil;
-import com.cache.common.enums.DataTypeEnum;
-import com.cache.common.exceptions.BusinessException;
 import com.cache.model.CacheResultVO;
 import com.cache.model.EmployeeVO;
 import com.cache.services.EmployeeService;
 import com.cache.services.HutoolCacheService;
 import org.springframework.stereotype.Service;
-import sun.misc.LRUCache;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
