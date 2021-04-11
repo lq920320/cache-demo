@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author zetu
@@ -28,11 +27,11 @@ public class GuavaCacheServiceImpl implements GuavaCacheService {
     @Autowired
     private EmployeeService employeeService;
 
-    private static final LoadingCache<String, EmployeeVO> loadingCache;
-    private static final LoadingCache<String, EmployeeVO> timedLoadingCache;
+    private static final LoadingCache<String, EmployeeVO> LOADING_CACHE;
+    private static final LoadingCache<String, EmployeeVO> TIMED_LOADING_CACHE;
 
     static {
-        loadingCache = CacheBuilder.newBuilder()
+        LOADING_CACHE = CacheBuilder.newBuilder()
                 // 最多容纳 30 个元素
                 .maximumSize(30)
                 // 这里可以监听移除动作
@@ -45,7 +44,7 @@ public class GuavaCacheServiceImpl implements GuavaCacheService {
                         return null;
                     }
                 });
-        timedLoadingCache = CacheBuilder.newBuilder()
+        TIMED_LOADING_CACHE = CacheBuilder.newBuilder()
                 // 最多容纳 30 个元素
                 .maximumSize(30)
                 // 默认访问后60s 过期
@@ -79,35 +78,35 @@ public class GuavaCacheServiceImpl implements GuavaCacheService {
      */
     private CacheResultVO getEmpByNoWithNoExpire(String empNo) throws ExecutionException {
         CacheResultVO result = new CacheResultVO();
-        if (Objects.nonNull(loadingCache.get(empNo))) {
+        if (Objects.nonNull(LOADING_CACHE.get(empNo))) {
             result.setDesc("guava loading cache 缓存数据");
-            result.setEmployee(loadingCache.get(empNo));
+            result.setEmployee(LOADING_CACHE.get(empNo));
             return result;
         }
         // 从数据库获取数据
         EmployeeVO empVo = employeeService.getByEmpNo(empNo);
         // 放入缓存的 loading cache
-        loadingCache.put(empNo, empVo);
+        LOADING_CACHE.put(empNo, empVo);
 
         result.setDesc("数据库数据");
-        result.setEmployee(loadingCache.get(empNo));
+        result.setEmployee(LOADING_CACHE.get(empNo));
         return result;
     }
 
     private CacheResultVO getEmpByNoWithExpireCache(String empNo) throws ExecutionException {
         CacheResultVO result = new CacheResultVO();
-        if (Objects.nonNull(timedLoadingCache.get(empNo))) {
+        if (Objects.nonNull(TIMED_LOADING_CACHE.get(empNo))) {
             result.setDesc("guava loading cache timed 缓存数据");
-            result.setEmployee(timedLoadingCache.get(empNo));
+            result.setEmployee(TIMED_LOADING_CACHE.get(empNo));
             return result;
         }
         // 从数据库获取数据
         EmployeeVO empVo = employeeService.getByEmpNo(empNo);
         // 放入缓存的 loading cache
-        timedLoadingCache.put(empNo, empVo);
+        TIMED_LOADING_CACHE.put(empNo, empVo);
 
         result.setDesc("数据库数据（可能是初始的数据库的数据，也可能是缓存过期后重新获取的）");
-        result.setEmployee(timedLoadingCache.get(empNo));
+        result.setEmployee(TIMED_LOADING_CACHE.get(empNo));
         return result;
     }
 }

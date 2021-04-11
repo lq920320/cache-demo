@@ -81,8 +81,12 @@ public class CacheController {
 
     @GetMapping("caffeine")
     @ApiOperation("获取 caffeine 缓存")
-    public ResultWrapper<CacheResultVO> getCaffeineCacheResult(@ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo) {
-        return null;
+    public ResultWrapper<CacheResultVO> getCaffeineCacheResult(
+            @ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo,
+            @ApiParam(name = "timeout", value = "是否有过期时间（默认60s）") @RequestParam(value = "timeout", required = false) Boolean timeout
+    ) {
+        CacheResultVO result = caffeineService.getEmpByNo(empNo, timeout);
+        return ResultWrapper.of(result);
     }
 
     @ApiOperation("获取 Cacheable 缓存数据")
