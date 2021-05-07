@@ -92,6 +92,7 @@ public class CacheController {
     @ApiOperation("获取 Cacheable 缓存数据")
     @GetMapping("cacheable")
     public ResultWrapper<CacheResultVO> getCacheableResult(@ApiParam(name = "empNo", value = "员工编号") @RequestParam(value = "empNo", required = false) String empNo) {
-        return null;
+        CacheResultVO result = cacheableService.getEmpByNo(empNo);
+        return ResultWrapper.of(result);
     }
 }

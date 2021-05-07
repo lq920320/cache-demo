@@ -3,6 +3,7 @@ package com.cache.services.impl;
 import com.cache.dao.entities.Employee;
 import com.cache.dao.mappers.EmployeeMapper;
 import com.cache.model.EmployeeVO;
+import com.cache.services.CacheableService;
 import com.cache.services.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Resource
     private EmployeeMapper empMapper;
+    @Resource
+    private CacheableService cacheableService;
 
     @Override
     public Integer addEmp(EmployeeVO emp) {
@@ -32,6 +35,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         empEntity.setCreateAt(nowDate);
         empEntity.setUpdateAt(nowDate);
         empMapper.insertEmp(empEntity);
+
+        // 这里我们可以把数据放入到本地 cache 中
+        emp.setId(empEntity.getId());
+        cacheableService.putToCache(emp);
+
         return empEntity.getId();
     }
 
